@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>git log --author=you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0d0a;
+    --bg2:#0d130e;
+    --panel:#0f1610;
+    --line:#1c2a1e;
+    --text:#c9e8d1;
+    --text-dim:#5f8268;
+    --green:#39ff6a;
+    --green-dim:#1f8a3e;
+    --amber:#ffb454;
+    --red:#ff5f56;
+    --cyan:#5fd7ff;
+    --purple:#c792ea;
+    --gray:#6b7a70;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'JetBrains Mono', monospace;
+    overflow-x:hidden;
+    cursor: default;
+    position:relative;
+  }
+  body::before{
+    content:'';
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(57,255,106,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(57,255,106,0.025) 1px, transparent 1px);
+    background-size: 42px 42px;
+    pointer-events:none;
+    z-index:1;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+  }
+  body::after{
+    content:'';
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:60;
+    opacity:0.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  ::selection{ background:var(--green); color:#04150a; }
+
+  /* ---------- scanline / crt glow on headings ---------- */
+  .glow{ text-shadow: 0 0 12px rgba(57,255,106,0.55), 0 0 2px rgba(57,255,106,0.8); }
+
+  a{ color:inherit; text-decoration:none; }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 28px;
+    background: rgba(10,13,10,0.75);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:0.5px; font-size:14px;}
+  .dot-row{ display:flex; gap:6px; }
+  .dot-row span{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .dot-row span:nth-child(1){ background:#ff5f56; }
+  .dot-row span:nth-child(2){ background:#ffbd2e; }
+  .dot-row span:nth-child(3){ background:#27c93f; }
+  nav{ display:flex; gap:22px; font-size:12px; color:var(--text-dim); }
+  nav a:hover{ color:var(--green); }
+  .nav-live{ display:flex; align-items:center; gap:8px; font-size:11px; color:var(--text-dim); }
+  .pulse{ width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); animation:pulse 1.6s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding: 120px 28px 80px;
+    position:relative; z-index:2;
+    max-width:1200px; margin:0 auto;
+  }
+  .prompt-line{ color:var(--text-dim); font-size:13px; margin-bottom:18px; display:flex; gap:8px; align-items:center;}
+  .prompt-line .caret{ color:var(--green); }
+  .hero h1{
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    font-size: clamp(2.4rem, 7vw, 5.6rem);
+    line-height:1.02;
+    letter-spacing:-1px;
+    color:#eafff0;
+  }
+  .hero h1 .accent{ color:var(--green); }
+  .hero .sub{
+    margin-top:22px; max-width:640px; color:var(--text-dim); font-size:15px; line-height:1.7;
+  }
+  .type-cursor{ display:inline-block; width:9px; height:1.1em; background:var(--green); margin-left:4px; vertical-align:middle; animation: blink 1s steps(1) infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero-stats{
+    margin-top:52px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .stat{
+    background:var(--panel); padding:20px 18px;
+    position:relative; overflow:hidden;
+  }
+  .stat .num{ font-family:'Space Mono',monospace; font-size: clamp(1.5rem,3vw,2.4rem); font-weight:700; color:var(--green); }
+  .stat .lbl{ font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-dim); margin-top:6px; }
+
+  .scroll-cue{
+    position:absolute; bottom:28px; left:28px; font-size:11px; color:var(--text-dim);
+    display:flex; align-items:center; gap:10px;
+  }
+  .scroll-cue .line{ width:1px; height:34px; background:linear-gradient(var(--green), transparent); animation: dropline 2s infinite; }
+  @keyframes dropline{ 0%{ transform:scaleY(0); transform-origin:top;} 50%{ transform:scaleY(1); transform-origin:top;} 50.01%{ transform-origin:bottom;} 100%{ transform:scaleY(0); transform-origin:bottom;} }
+
+  /* ---------- SECTION LABELS ---------- */
+  .section{ position:relative; z-index:2; max-width:1200px; margin:0 auto; padding: 90px 28px; }
+  .section-head{ margin-bottom: 44px; }
+  .section-tag{ font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--green-dim); }
+  .section-title{ font-family:'Space Mono',monospace; font-size:clamp(1.6rem,4vw,2.6rem); margin-top:10px; color:#eafff0; font-weight:700; }
+
+  /* ---------- FILTER BAR ---------- */
+  .filters{
+    display:flex; flex-wrap:wrap; gap:10px; margin-bottom:34px;
+    padding:16px; background:var(--panel); border:1px solid var(--line);
+  }
+  .filters .fgroup{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .filters label{ font-size:10px; color:var(--text-dim); letter-spacing:1.5px; text-transform:uppercase; margin-right:4px; }
+  .chip{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px; padding:7px 13px; border:1px solid var(--line); color:var(--text-dim);
+    background:transparent; cursor:pointer; transition:.15s ease; letter-spacing:.3px;
+    border-radius:2px;
+  }
+  .chip:hover{ border-color:var(--green-dim); color:var(--text); }
+  .chip.active{ background:var(--green); color:#04150a; border-color:var(--green); font-weight:700; }
+  .search-wrap{ margin-left:auto; display:flex; align-items:center; gap:8px; border:1px solid var(--line); padding:6px 10px; min-width:220px; }
+  .search-wrap span{ color:var(--green-dim); }
+  .search-wrap input{
+    background:transparent; border:none; outline:none; color:var(--text); font-family:'JetBrains Mono',monospace; font-size:12.5px; width:100%;
+  }
+  .search-wrap input::placeholder{ color:var(--text-dim); }
+
+  .results-meta{ font-size:11.5px; color:var(--text-dim); margin-bottom:18px; }
+  .results-meta b{ color:var(--green); }
+
+  /* ---------- PR GRID ---------- */
+  .pr-grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px;
+  }
+  .pr-card{
+    background:var(--panel); border:1px solid var(--line); padding:20px;
+    cursor:pointer; position:relative; overflow:hidden;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    display:flex; flex-direction:column; gap:14px;
+    will-change: transform;
+  }
+  .pr-card::before{
+    content:''; position:absolute; top:0; left:0; width:3px; height:100%;
+    background:var(--green-dim); transition:.25s ease;
+  }
+  .pr-card:hover{
+    transform: translateY(-4px);
+    border-color:var(--green-dim);
+    box-shadow: 0 18px 40px -18px rgba(57,255,106,0.25);
+  }
+  .pr-card:hover::before{ background:var(--green); box-shadow:0 0 12px var(--green); }
+  .pr-card .row-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .pr-repo{ font-size:10.5px; color:var(--cyan); letter-spacing:.5px; word-break:break-word; }
+  .pr-points{ font-family:'Space Mono',monospace; font-weight:700; color:var(--amber); font-size:14px; white-space:nowrap; }
+  .pr-title{ font-size:13.5px; line-height:1.5; color:#eafff0; }
+  .pr-num{ color:var(--text-dim); font-weight:400; }
+  .pr-meta-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; }
+  .badge{ font-size:9.5px; padding:3px 8px; border:1px solid var(--line); text-transform:uppercase; letter-spacing:0.8px; color:var(--text-dim); border-radius:2px; }
+  .badge.diff-beginner{ color:#8fe3a3; border-color:#1f8a3e55; }
+  .badge.diff-intermediate{ color:var(--cyan); border-color:#2a5f7355; }
+  .badge.diff-advanced{ color:var(--amber); border-color:#7a5a2255; }
+  .badge.diff-critical{ color:var(--red); border-color:#7a222255; }
+  .badge.diff-unrated{ color:var(--gray); }
+  .badge.quality-exceptional{ color:var(--purple); border-color:#5a3a7355; }
+  .badge.quality-clean{ color:#8fe3a3; border-color:#1f8a3e55; }
+  .pr-foot{ display:flex; justify-content:space-between; align-items:center; font-size:10.5px; color:var(--text-dim); border-top:1px dashed var(--line); padding-top:12px; }
+  .pr-foot .go{ color:var(--green); display:flex; align-items:center; gap:5px; }
+  .pr-foot .go svg{ width:11px; height:11px; transition:transform .2s; }
+  .pr-card:hover .go svg{ transform:translate(2px,-2px); }
+
+  .no-results{ text-align:center; padding:60px 20px; color:var(--text-dim); font-size:13px; }
+
+  /* ---------- REPO PARALLAX SECTION ---------- */
+  .repos-wrap{ position:relative; }
+  .repo-panel{
+    position:relative;
+    padding: 60px 28px;
+    border-top:1px solid var(--line);
+    overflow:hidden;
+  }
+  .repo-panel .bgtext{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    font-family:'Space Mono',monospace; font-weight:700;
+    font-size: 14vw; color:transparent; -webkit-text-stroke:1px rgba(57,255,106,0.06);
+    white-space:nowrap; pointer-events:none; z-index:0; letter-spacing:-4px;
+  }
+  .repo-inner{ position:relative; z-index:2; max-width:1200px; margin:0 auto; }
+  .repo-head{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:14px; margin-bottom:22px; }
+  .repo-name{ font-family:'Space Mono',monospace; font-size:clamp(1.3rem,3vw,2rem); color:#eafff0; }
+  .repo-name .owner{ color:var(--text-dim); font-size:0.6em; display:block; }
+  .repo-stats{ display:flex; gap:22px; font-size:11px; color:var(--text-dim); }
+  .repo-stats b{ color:var(--green); font-family:'Space Mono',monospace; }
+  .repo-bar-track{ height:6px; background:var(--line); width:100%; margin-bottom:26px; overflow:hidden; }
+  .repo-bar-fill{ height:100%; background:linear-gradient(90deg,var(--green-dim),var(--green)); width:0%; }
+
+  /* ---------- ABOUT / TERMINAL FEED ---------- */
+  .terminal{
+    background:#070a07; border:1px solid var(--line); border-radius:6px;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.8);
+    overflow:hidden;
+  }
+  .terminal .tbar{
+    display:flex; align-items:center; gap:8px; padding:10px 14px; background:#0d130e; border-bottom:1px solid var(--line);
+  }
+  .terminal .tbar span{ font-size:11px; color:var(--text-dim); margin-left:8px; }
+  .terminal-body{ padding:22px; font-size:12.5px; line-height:2; max-height:340px; overflow-y:auto; }
+  .terminal-body::-webkit-scrollbar{ width:6px; }
+  .terminal-body::-webkit-scrollbar-thumb{ background:var(--line); }
+  .tline{ opacity:0; }
+  .tline .path{ color:var(--cyan); }
+  .tline .cmd{ color:var(--text); }
+  .tline .ok{ color:var(--green); }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    position:relative; z-index:2; padding:60px 28px 40px; border-top:1px solid var(--line);
+    text-align:center; color:var(--text-dim); font-size:11.5px;
+  }
+  footer .fbig{ font-family:'Space Mono',monospace; color:var(--green); font-size:15px; margin-bottom:10px; }
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(4,8,5,0.82); backdrop-filter:blur(6px);
+    display:none; align-items:center; justify-content:center; z-index:200; padding:20px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal{
+    background:var(--panel); border:1px solid var(--green-dim); max-width:520px; width:100%;
+    padding:30px; position:relative; box-shadow:0 40px 100px -20px rgba(57,255,106,0.15);
+  }
+  .modal .close{ position:absolute; top:14px; right:16px; color:var(--text-dim); cursor:pointer; font-size:18px; background:none; border:none; }
+  .modal .close:hover{ color:var(--red); }
+  .modal h3{ font-family:'Space Mono',monospace; font-size:16px; color:#eafff0; margin-bottom:16px; line-height:1.5; }
+  .modal .mrow{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--line); font-size:12px; }
+  .modal .mrow .k{ color:var(--text-dim); }
+  .modal .mrow .v{ color:var(--text); text-align:right; }
+  .modal .go-btn{
+    margin-top:22px; display:flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--green); color:#04150a; font-weight:700; padding:13px; font-size:13px;
+    letter-spacing:0.5px; text-transform:uppercase; cursor:pointer; border:none; width:100%;
+  }
+  .modal .go-btn:hover{ background:#4dffb0; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:720px){
+    nav{ display:none; }
+    .hero-stats{ grid-template-columns:repeat(2,1fr); }
+    .section{ padding:60px 18px; }
+    .filters{ flex-direction:column; align-items:stretch; }
+    .search-wrap{ margin-left:0; }
+    .repo-panel .bgtext{ font-size:22vw; }
+    .pr-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="fx-layer" style="position:fixed;inset:0;pointer-events:none;z-index:3;"></div>
+
+<header>
+  <div class="brand">
+    <div class="dot-row"><span></span><span></span><span></span></div>
+    ~/contributions
+  </div>
+  <nav>
+    <a href="#feed">log</a>
+    <a href="#repos">repos</a>
+    <a href="#about">whoami</a>
+  </nav>
+  <div class="nav-live"><span class="pulse"></span>61 merged PRs</div>
+</header>
+
+<section class="hero">
+  <div class="prompt-line"><span class="caret">➜</span> git log --author=me --merged --all-repos</div>
+  <h1>Open source, <span class="accent">shipped.</span></h1>
+  <p class="sub" id="typeSub">A running ledger of every merged pull request &mdash; tests, fixes, features, and cleanups &mdash; across <span id="repoCountInline">12</span> repositories. Click any entry to jump straight to the PR.<span class="type-cursor"></span></p>
+
+  <div class="hero-stats" id="heroStats">
+    <div class="stat"><div class="num" data-count="61">0</div><div class="lbl">Merged PRs</div></div>
+    <div class="stat"><div class="num" data-count="5431">0</div><div class="lbl">Total points</div></div>
+    <div class="stat"><div class="num" data-count="12">0</div><div class="lbl">Repositories</div></div>
+    <div class="stat"><div class="num" data-count="6">0</div><div class="lbl">Critical-level PRs</div></div>
+  </div>
+
+  <div class="scroll-cue"><div class="line"></div>scroll</div>
+</section>
+
+<section class="section" id="feed">
+  <div class="section-head">
+    <div class="section-tag">// 02 &mdash; the feed</div>
+    <div class="section-title">Every merged PR, filterable</div>
+  </div>
+
+  <div class="filters">
+    <div class="fgroup" id="repoFilters">
+      <label>repo</label>
+    </div>
+    <div class="fgroup" id="diffFilters">
+      <label>level</label>
+    </div>
+    <div class="search-wrap">
+      <span>&gt;</span>
+      <input type="text" id="searchInput" placeholder="grep title...">
+    </div>
+  </div>
+
+  <div class="results-meta" id="resultsMeta"></div>
+  <div class="pr-grid" id="prGrid"></div>
+  <div class="no-results" id="noResults" style="display:none;">// no matches &mdash; try clearing filters</div>
+</section>
+
+<section class="section" id="repos" style="padding-top:0;">
+  <div class="section-head">
+    <div class="section-tag">// 03 &mdash; by repository</div>
+    <div class="section-title">Where the work landed</div>
+  </div>
+</section>
+<div class="repos-wrap" id="repoPanels"></div>
+
+<section class="section" id="about">
+  <div class="section-head">
+    <div class="section-tag">// 04 &mdash; whoami</div>
+    <div class="section-title">Live activity stream</div>
+  </div>
+  <div class="terminal">
+    <div class="tbar">
+      <div class="dot-row"><span></span><span></span><span></span></div>
+      <span>bash &mdash; contributions.log</span>
+    </div>
+    <div class="terminal-body" id="terminalBody"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="fbig">$ echo "thanks for scrolling"</div>
+  built from a personal PR ledger &middot; data current as of the latest merge &middot; click any card to view it on GitHub
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="close" id="modalClose">&times;</button>
+    <h3 id="modalTitle"></h3>
+    <div class="mrow"><div class="k">Repository</div><div class="v" id="modalRepo"></div></div>
+    <div class="mrow"><div class="k">Difficulty</div><div class="v" id="modalDiff"></div></div>
+    <div class="mrow"><div class="k">Quality</div><div class="v" id="modalQuality"></div></div>
+    <div class="mrow"><div class="k">Type bonuses</div><div class="v" id="modalTypes"></div></div>
+    <div class="mrow"><div class="k">Points</div><div class="v" id="modalPoints"></div></div>
+    <div class="mrow"><div class="k">Merged</div><div class="v" id="modalMerged"></div></div>
+    <button class="go-btn" id="modalGo">View on GitHub &nbsp;↗</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ============ DATA ============ */
+const DATA = [{"title":"chore: remove unused PR description markdown files","repo":"Premshaw23/Learnova","difficulty":"beginner","quality":"","types":[],"points":70,"merged":"7/8/2026","url":"https://github.com/Premshaw23/Learnova/pull/3922","pr":"3922"},{"title":"[Perf] Remove dangerouslySetInnerHTML from portfolio templates (#4252)","repo":"anurag3407/career-pilot","difficulty":"advanced","quality":"clean","types":["security"],"points":136,"merged":"7/6/2026","url":"https://github.com/anurag3407/career-pilot/pull/4364","pr":"4364"},{"title":"docs: add browser compatibility table rendering demo","repo":"SAPTARSHI-coder/EaseMotion-css","difficulty":"intermediate","quality":"","types":["docs"],"points":90,"merged":"6/30/2026","url":"https://github.com/SAPTARSHI-coder/EaseMotion-css/pull/30794","pr":"30794"},{"title":"docs: add animation documentation cleanup demo","repo":"SAPTARSHI-coder/EaseMotion-css","difficulty":"intermediate","quality":"","types":["docs"],"points":90,"merged":"6/30/2026","url":"https://github.com/SAPTARSHI-coder/EaseMotion-css/pull/30706","pr":"30706"},{"title":"docs: add footer keyframe collision demo","repo":"SAPTARSHI-coder/EaseMotion-css","difficulty":"intermediate","quality":"","types":["docs"],"points":90,"merged":"6/30/2026","url":"https://github.com/SAPTARSHI-coder/EaseMotion-css/pull/30700","pr":"30700"},{"title":"docs: add footer keyframe namespace collision demo","repo":"SAPTARSHI-coder/EaseMotion-css","difficulty":"intermediate","quality":"","types":["docs"],"points":90,"merged":"6/30/2026","url":"https://github.com/SAPTARSHI-coder/EaseMotion-css/pull/30593","pr":"30593"},{"title":"docs: propose selector prefix consistency for issue #27882","repo":"SAPTARSHI-coder/EaseMotion-css","difficulty":"intermediate","quality":"","types":["docs"],"points":90,"merged":"6/30/2026","url":"https://github.com/SAPTARSHI-coder/EaseMotion-css/pull/30586","pr":"30586"},{"title":"fix(resume-parser): support pdf-parse v2 api","repo":"JhaSourav07/commitpulse","difficulty":"intermediate","quality":"","types":["bug"],"points":95,"merged":"6/24/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/6319","pr":"6319"},{"title":"test(svg): verify sanitizeSpeed handles decimal integer strings","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"clean","types":["testing"],"points":84,"merged":"6/23/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/6264","pr":"6264"},{"title":"fix(resume-parser): filter corrupted skill tokens","repo":"JhaSourav07/commitpulse","difficulty":"critical","quality":"exceptional","types":["bug","refactor"],"points":175,"merged":"6/23/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/6299","pr":"6299"},{"title":"[Cleanup] Remove obsolete PR artifact files and unused scratch scripts","repo":"Premshaw23/Learnova","difficulty":"beginner","quality":"","types":[],"points":70,"merged":"6/22/2026","url":"https://github.com/Premshaw23/Learnova/pull/3828","pr":"3828"},{"title":"feat: implement Infinite Canvas portfolio template (#1878)","repo":"anurag3407/career-pilot","difficulty":"intermediate","quality":"","types":["design"],"points":95,"merged":"6/22/2026","url":"https://github.com/anurag3407/career-pilot/pull/4175","pr":"4175"},{"title":"test(achievements): add timezone normalization boundary tests","repo":"JhaSourav07/commitpulse","difficulty":"intermediate","quality":"clean","types":["testing"],"points":102,"merged":"6/22/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/5958","pr":"5958"},{"title":"feat: implement automated refresh token cleanup and schema optimization","repo":"Dev-Card/DevCard","difficulty":"critical","quality":"exceptional","types":["testing","performance","refactor","devops","bug","feature"],"points":175,"merged":"6/21/2026","url":"https://github.com/Dev-Card/DevCard/pull/583","pr":"583"},{"title":"feat(portfolio): implement Art Deco Gold template (#1944)","repo":"anurag3407/career-pilot","difficulty":"intermediate","quality":"","types":["design"],"points":95,"merged":"6/19/2026","url":"https://github.com/anurag3407/career-pilot/pull/4066","pr":"4066"},{"title":"test(svg): add animations massive scaling coverage","repo":"JhaSourav07/commitpulse","difficulty":"unrated","quality":"","types":["testing"],"points":80,"merged":"6/16/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/5553","pr":"5553"},{"title":"test: add mouse interactivity tests for ResumeUpload (#2717)","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"clean","types":["testing","accessibility"],"points":99,"merged":"6/16/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/5729","pr":"5729"},{"title":"test(pr-insights): add massive scaling coverage for TopMetricsRow","repo":"JhaSourav07/commitpulse","difficulty":"advanced","quality":"clean","types":["testing"],"points":126,"merged":"6/14/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/5546","pr":"5546"},{"title":"test(types): add dashboard empty fallback coverage","repo":"JhaSourav07/commitpulse","difficulty":"intermediate","quality":"clean","types":["testing"],"points":102,"merged":"6/14/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/5547","pr":"5547"},{"title":"test(svg): add language colors massive scaling coverage","repo":"JhaSourav07/commitpulse","difficulty":"intermediate","quality":"clean","types":["testing"],"points":102,"merged":"6/14/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/5559","pr":"5559"},{"title":"test(dashboard): add error theme contrast coverage","repo":"JhaSourav07/commitpulse","difficulty":"intermediate","quality":"clean","types":["testing"],"points":102,"merged":"6/14/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/5566","pr":"5566"},{"title":"feat: implement GitHub platform auto-discovery from GitHub API","repo":"Dev-Card/DevCard","difficulty":"advanced","quality":"exceptional","types":["testing","performance","refactor","feature"],"points":175,"merged":"6/12/2026","url":"https://github.com/Dev-Card/DevCard/pull/506","pr":"506"},{"title":"test(ContributorsClient-empty-fallback): verify Edge Cases & Empty/Missing Inputs Verification (Variation 1)","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"clean","types":["testing"],"points":84,"merged":"6/11/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/5195","pr":"5195"},{"title":"test(tooltipUtils): add massive scaling test coverage","repo":"JhaSourav07/commitpulse","difficulty":"intermediate","quality":"exceptional","types":["feature","testing"],"points":123,"merged":"6/8/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/4886","pr":"4886"},{"title":"fix(cards): prevent concurrent default card race condition (#344)","repo":"Dev-Card/DevCard","difficulty":"advanced","quality":"clean","types":["performance","refactor","bug"],"points":151,"merged":"6/7/2026","url":"https://github.com/Dev-Card/DevCard/pull/385","pr":"385"},{"title":"test(ThemeSwitch-mock-integrations): verify async service mocks and cache stubs (#2841)","repo":"JhaSourav07/commitpulse","difficulty":"advanced","quality":"","types":["testing"],"points":115,"merged":"6/6/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/3191","pr":"3191"},{"title":"feat(portfolio): build Spring Bounce animated portfolio template","repo":"anurag3407/career-pilot","difficulty":"beginner","quality":"clean","types":["design"],"points":84,"merged":"6/6/2026","url":"https://github.com/anurag3407/career-pilot/pull/2918","pr":"2918"},{"title":"test(track-user-protection): validate service logic","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"clean","types":["testing"],"points":84,"merged":"6/5/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/3685","pr":"3685"},{"title":"test(validate-user): add massive scaling coverage","repo":"JhaSourav07/commitpulse","difficulty":"intermediate","quality":"clean","types":["testing"],"points":102,"merged":"6/5/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/3722","pr":"3722"},{"title":"test(StatsCard-error-resilience): verify Hydration Stability, Exception Safety & Error Fallbacks","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"clean","types":["testing"],"points":84,"merged":"6/5/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/3724","pr":"3724"},{"title":"test(refresh-policy-timezone-boundaries): verify Timezone Normalization & Calendar Data Boundary Alignment","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"clean","types":["testing"],"points":84,"merged":"6/5/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/3727","pr":"3727"},{"title":"fix(auth): prevent Auth page crash when loading users","repo":"geturbackend/urBackend","difficulty":"intermediate","quality":"exceptional","types":["bug"],"points":0,"merged":"6/3/2026","url":"https://github.com/geturbackend/urBackend/pull/263","pr":"263"},{"title":"test(theme-switch): add error resilience coverage","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"clean","types":["testing"],"points":84,"merged":"6/3/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/3019","pr":"3019"},{"title":"fix(a11y): update aria labels for social links","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"clean","types":["bug"],"points":84,"merged":"6/2/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/3000","pr":"3000"},{"title":"test(refresh-rate-limiter): add responsive breakpoint coverage","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"exceptional","types":["testing"],"points":90,"merged":"6/2/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/2992","pr":"2992"},{"title":"test: add empty fallback edge case tests for ContributorsPage","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"exceptional","types":["testing"],"points":90,"merged":"6/2/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/2989","pr":"2989"},{"title":"fix(dx): pin root dependency versions (#210)","repo":"geturbackend/urBackend","difficulty":"advanced","quality":"clean","types":["refactor"],"points":0,"merged":"5/31/2026","url":"https://github.com/geturbackend/urBackend/pull/236","pr":"236"},{"title":"test(utils): check rate limit TTL boundary robustness (#1561)","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"exceptional","types":["testing"],"points":90,"merged":"5/30/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/1662","pr":"1662"},{"title":"test(utils): check username truncator boundary robustness (#1563)","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"exceptional","types":["testing"],"points":90,"merged":"5/30/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/1665","pr":"1665"},{"title":"test(utils): check date range formatter boundary robustness (#1564)","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"exceptional","types":["testing"],"points":90,"merged":"5/30/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/1667","pr":"1667"},{"title":"test(customize): add invalid snippet utility coverage (#915)","repo":"JhaSourav07/commitpulse","difficulty":"beginner","quality":"exceptional","types":["testing"],"points":90,"merged":"5/30/2026","url":"https://github.com/JhaSourav07/commitpulse/pull/1626","pr":"1626"},{"title":"fix: harden progress interaction lifecycle and pointer handling","repo":"dhairyagothi/100_days_100_web_project","difficulty":"intermediate","quality":"","types":["refactor"],"points":95,"merged":"5/28/2026","url":"https://github.com/dhairyagothi/100_days_100_web_project/pull/4519","pr":"4519"},{"title":"fix(dnsproxy): tighten cleanup lifecycle synchronization and TTL regression coverage (#64)","repo":"nevinshine/telos-runtime","difficulty":"unrated","quality":"clean","types":["security"],"points":94,"merged":"5/28/2026","url":"https://github.com/nevinshine/telos-runtime/pull/99","pr":"99"},{"title":"fix(validation): add missing max length constraints to auth schemas","repo":"geturbackend/urBackend","difficulty":"beginner","quality":"clean","types":["refactor"],"points":0,"merged":"5/27/2026","url":"https://github.com/geturbackend/urBackend/pull/221","pr":"221"},{"title":"fix(auth): add timeout handling for OAuth fetch requests","repo":"geturbackend/urBackend","difficulty":"intermediate","quality":"exceptional","types":["refactor"],"points":0,"merged":"5/27/2026","url":"https://github.com/geturbackend/urBackend/pull/220","pr":"220"},{"title":"[DX] Clean up .env.example: remove duplicates, add source comments, improve onboarding","repo":"geturbackend/urBackend","difficulty":"beginner","quality":"clean","types":["docs"],"points":0,"merged":"5/27/2026","url":"https://github.com/geturbackend/urBackend/pull/212","pr":"212"},{"title":"refactor: extract shared CI environment setup logic","repo":"nevinshine/telos-runtime","difficulty":"intermediate","quality":"clean","types":["feature"],"points":102,"merged":"5/26/2026","url":"https://github.com/nevinshine/telos-runtime/pull/62","pr":"62"},{"title":"Refactor DomainIntel cache invalidation and deduplicate typosquat deletions","repo":"nevinshine/telos-runtime","difficulty":"intermediate","quality":"exceptional","types":["feature"],"points":113,"merged":"5/26/2026","url":"https://github.com/nevinshine/telos-runtime/pull/63","pr":"63"},{"title":"Fix markdown table rendering by adding remark-gfm support","repo":"Premshaw23/Learnova","difficulty":"intermediate","quality":"","types":[],"points":85,"merged":"5/26/2026","url":"https://github.com/Premshaw23/Learnova/pull/1331","pr":"1331"},{"title":"feat(#92): add manual attendee check-in with search & filter","repo":"anubhavxdev/Event-management-system-main","difficulty":"unrated","quality":"","types":[],"points":70,"merged":"5/24/2026","url":"https://github.com/anubhavxdev/Event-management-system-main/pull/248","pr":"248"},{"title":"feat(#14): add link reordering with drag-and-drop UI","repo":"vishnukothakapu/linkid","difficulty":"advanced","quality":"","types":["feature"],"points":115,"merged":"5/22/2026","url":"https://github.com/vishnukothakapu/linkid/pull/189","pr":"189"},{"title":"feat(#17): implement realtime QR check-in via Socket.IO","repo":"anubhavxdev/Event-management-system-main","difficulty":"critical","quality":"","types":["feature"],"points":140,"merged":"5/18/2026","url":"https://github.com/anubhavxdev/Event-management-system-main/pull/58","pr":"58"},{"title":"fix(#12): stream participants CSV to response; avoid temp files","repo":"anubhavxdev/Event-management-system-main","difficulty":"intermediate","quality":"","types":["performance"],"points":100,"merged":"5/16/2026","url":"https://github.com/anubhavxdev/Event-management-system-main/pull/56","pr":"56"},{"title":"fix(#10): verify organizer owns event before check-in","repo":"anubhavxdev/Event-management-system-main","difficulty":"intermediate","quality":"","types":["security"],"points":105,"merged":"5/16/2026","url":"https://github.com/anubhavxdev/Event-management-system-main/pull/51","pr":"51"},{"title":"fix(#7): replace hardcoded email branding with APP_NAME env","repo":"anubhavxdev/Event-management-system-main","difficulty":"beginner","quality":"","types":["bug"],"points":80,"merged":"5/16/2026","url":"https://github.com/anubhavxdev/Event-management-system-main/pull/50","pr":"50"},{"title":"feat(#49): add payload validation to AI edit_file tools","repo":"piyushdotcomm/Editron","difficulty":"critical","quality":"exceptional","types":[],"points":170,"merged":"5/15/2026","url":"https://github.com/piyushdotcomm/Editron/pull/96","pr":"96"},{"title":"docs: improve footer keyframe namespace collision demo","repo":"SAPTARSHI-coder/EaseMotion-css","difficulty":"unrated","quality":"","types":[],"points":0,"merged":"","url":"https://github.com/SAPTARSHI-coder/EaseMotion-css/pull/30695","pr":"30695"},{"title":"fix(css): add ease-prefixed aliases for component selectors","repo":"SAPTARSHI-coder/EaseMotion-css","difficulty":"unrated","quality":"","types":[],"points":0,"merged":"","url":"https://github.com/SAPTARSHI-coder/EaseMotion-css/pull/30581","pr":"30581"},{"title":"feat(contact): enhance contact page UX and accessibility","repo":"dhairyagothi/100_days_100_web_project","difficulty":"advanced","quality":"","types":["refactor"],"points":115,"merged":"","url":"https://github.com/dhairyagothi/100_days_100_web_project/pull/9272","pr":"9272"},{"title":"feat(404): improve accessibility, navigation, and error context","repo":"dhairyagothi/100_days_100_web_project","difficulty":"intermediate","quality":"","types":["refactor"],"points":95,"merged":"","url":"https://github.com/dhairyagothi/100_days_100_web_project/pull/8895","pr":"8895"},{"title":"feat: implement automated refresh token cleanup and schema optimization","repo":"udaycodespace/GSSoC_2026_DevCard","difficulty":"unrated","quality":"","types":[],"points":0,"merged":"","url":"https://github.com/udaycodespace/GSSoC_2026_DevCard/pull/1","pr":"1"}];
+
+/* ============ DERIVED ============ */
+const repos = [...new Set(DATA.map(d=>d.repo))];
+const diffOrder = ['critical','advanced','intermediate','beginner','unrated'];
+const diffs = diffOrder.filter(d => DATA.some(x=>x.difficulty===d));
+
+const totalPoints = DATA.reduce((s,d)=>s+d.points,0);
+const criticalCount = DATA.filter(d=>d.difficulty==='critical').length;
+
+document.querySelector('[data-count="61"]').dataset.count = DATA.length;
+document.querySelector('[data-count="5431"]').dataset.count = totalPoints;
+document.querySelector('[data-count="12"]').dataset.count = repos.length;
+document.querySelector('[data-count="6"]').dataset.count = criticalCount;
+document.getElementById('repoCountInline').textContent = repos.length;
+
+/* ============ FILTER STATE ============ */
+let activeRepo = 'all';
+let activeDiff = 'all';
+let searchTerm = '';
+
+/* ============ BUILD FILTER CHIPS ============ */
+const repoFilterEl = document.getElementById('repoFilters');
+const allRepoChip = document.createElement('button');
+allRepoChip.className='chip active'; allRepoChip.textContent='all repos'; allRepoChip.dataset.repo='all';
+repoFilterEl.appendChild(allRepoChip);
+repos.forEach(r=>{
+  const b=document.createElement('button');
+  b.className='chip'; b.textContent=r.split('/')[1]||r; b.dataset.repo=r;
+  repoFilterEl.appendChild(b);
+});
+
+const diffFilterEl = document.getElementById('diffFilters');
+const allDiffChip = document.createElement('button');
+allDiffChip.className='chip active'; allDiffChip.textContent='all levels'; allDiffChip.dataset.diff='all';
+diffFilterEl.appendChild(allDiffChip);
+diffs.forEach(d=>{
+  const b=document.createElement('button');
+  b.className='chip'; b.textContent=d; b.dataset.diff=d;
+  diffFilterEl.appendChild(b);
+});
+
+repoFilterEl.addEventListener('click', e=>{
+  if(!e.target.dataset.repo) return;
+  activeRepo = e.target.dataset.repo;
+  [...repoFilterEl.children].forEach(c=>c.classList.toggle('active', c===e.target));
+  render();
+});
+diffFilterEl.addEventListener('click', e=>{
+  if(!e.target.dataset.diff) return;
+  activeDiff = e.target.dataset.diff;
+  [...diffFilterEl.children].forEach(c=>c.classList.toggle('active', c===e.target));
+  render();
+});
+document.getElementById('searchInput').addEventListener('input', e=>{
+  searchTerm = e.target.value.toLowerCase();
+  render();
+});
+
+/* ============ CARD BUILDER ============ */
+function typeBadges(d){
+  let h = '';
+  if(d.difficulty) h += `<span class="badge diff-${d.difficulty}">${d.difficulty}</span>`;
+  if(d.quality) h += `<span class="badge quality-${d.quality}">${d.quality}</span>`;
+  d.types.forEach(t=> h += `<span class="badge">${t}</span>`);
+  return h;
+}
+
+function cardHTML(d, idx){
+  return `<div class="pr-card" data-idx="${idx}">
+    <div class="row-top">
+      <div class="pr-repo">${d.repo}</div>
+      <div class="pr-points">+${d.points}</div>
+    </div>
+    <div class="pr-title">${escapeHTML(d.title)} <span class="pr-num">#${d.pr}</span></div>
+    <div class="pr-meta-row">${typeBadges(d)}</div>
+    <div class="pr-foot">
+      <span>${d.merged || 'unmerged date'}</span>
+      <span class="go">view PR <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
+    </div>
+  </div>`;
+}
+function escapeHTML(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+const grid = document.getElementById('prGrid');
+const resultsMeta = document.getElementById('resultsMeta');
+const noResults = document.getElementById('noResults');
+
+function getFiltered(){
+  return DATA.filter(d=>{
+    if(activeRepo!=='all' && d.repo!==activeRepo) return false;
+    if(activeDiff!=='all' && d.difficulty!==activeDiff) return false;
+    if(searchTerm && !d.title.toLowerCase().includes(searchTerm) && !d.repo.toLowerCase().includes(searchTerm)) return false;
+    return true;
+  });
+}
+
+function render(){
+  const filtered = getFiltered();
+  resultsMeta.innerHTML = `showing <b>${filtered.length}</b> / ${DATA.length} PRs &middot; <b>${filtered.reduce((s,d)=>s+d.points,0)}</b> pts in view`;
+  grid.innerHTML = filtered.map((d,i)=>cardHTML(d, DATA.indexOf(d))).join('');
+  noResults.style.display = filtered.length ? 'none' : 'block';
+
+  gsap.fromTo(grid.children, {opacity:0, y:24}, {opacity:1, y:0, duration:0.5, stagger:0.035, ease:'power2.out'});
+}
+render();
+
+/* ============ CARD CLICK -> MODAL ============ */
+const modalOverlay = document.getElementById('modalOverlay');
+grid.addEventListener('click', e=>{
+  const card = e.target.closest('.pr-card');
+  if(!card) return;
+  const d = DATA[+card.dataset.idx];
+  openModal(d);
+});
+function openModal(d){
+  document.getElementById('modalTitle').textContent = d.title + ' #' + d.pr;
+  document.getElementById('modalRepo').textContent = d.repo;
+  document.getElementById('modalDiff').textContent = d.difficulty;
+  document.getElementById('modalQuality').textContent = d.quality || '—';
+  document.getElementById('modalTypes').textContent = d.types.length? d.types.join(', ') : '—';
+  document.getElementById('modalPoints').textContent = d.points + ' pts';
+  document.getElementById('modalMerged').textContent = d.merged || 'not yet merged';
+  document.getElementById('modalGo').onclick = ()=> window.open(d.url, '_blank');
+  modalOverlay.classList.add('open');
+}
+document.getElementById('modalClose').addEventListener('click', ()=> modalOverlay.classList.remove('open'));
+modalOverlay.addEventListener('click', e=>{ if(e.target===modalOverlay) modalOverlay.classList.remove('open'); });
+
+/* ============ REPO PARALLAX PANELS ============ */
+const repoPanelsEl = document.getElementById('repoPanels');
+const repoAgg = repos.map(r=>{
+  const items = DATA.filter(d=>d.repo===r);
+  return { repo:r, count:items.length, points:items.reduce((s,d)=>s+d.points,0), items };
+}).sort((a,b)=>b.points-a.points);
+const maxPoints = Math.max(...repoAgg.map(r=>r.points));
+
+repoAgg.forEach((r,i)=>{
+  const [owner,name] = r.repo.split('/');
+  const panel = document.createElement('div');
+  panel.className='repo-panel';
+  panel.innerHTML = `
+    <div class="bgtext" data-speed="${0.3 + (i%3)*0.15}">${(name||r.repo).toUpperCase()}</div>
+    <div class="repo-inner">
+      <div class="repo-head">
+        <div class="repo-name"><span class="owner">${owner}/</span>${name||r.repo}</div>
+        <div class="repo-stats">
+          <div><b>${r.count}</b> PRs</div>
+          <div><b>${r.points}</b> pts</div>
+        </div>
+      </div>
+      <div class="repo-bar-track"><div class="repo-bar-fill" data-fill="${(r.points/maxPoints*100).toFixed(1)}"></div></div>
+      <div class="pr-grid repo-grid">
+        ${r.items.slice(0,6).map(d=>cardHTML(d, DATA.indexOf(d))).join('')}
+      </div>
+      ${r.items.length>6? `<div style="margin-top:16px; font-size:11px; color:var(--text-dim);">+ ${r.items.length-6} more in this repo — use the filter above to see all</div>` : ''}
+    </div>
+  `;
+  repoPanelsEl.appendChild(panel);
+});
+repoPanelsEl.addEventListener('click', e=>{
+  const card = e.target.closest('.pr-card');
+  if(!card) return;
+  const d = DATA[+card.dataset.idx];
+  openModal(d);
+});
+
+/* ============ TERMINAL FEED ============ */
+const termBody = document.getElementById('terminalBody');
+const recent = [...DATA].filter(d=>d.merged).sort((a,b)=> new Date(b.merged) - new Date(a.merged)).slice(0,18);
+termBody.innerHTML = recent.map(d=>{
+  return `<div class="tline"><span class="path">${d.repo}</span> <span class="cmd">merge #${d.pr}</span> <span class="ok">✔ +${d.points}pts</span> <span style="color:var(--text-dim)">(${d.merged})</span></div>`;
+}).join('');
+
+ScrollTrigger.create({
+  trigger: '#about',
+  start: 'top 75%',
+  onEnter: ()=>{
+    gsap.to('.tline', { opacity:1, duration:0.05, stagger:0.09 });
+  },
+  once:true
+});
+
+/* ============ HERO COUNTER ANIMATION ============ */
+document.querySelectorAll('.stat .num').forEach(el=>{
+  const target = +el.dataset.count;
+  const obj = {val:0};
+  gsap.to(obj, {
+    val: target, duration: 1.8, ease:'power2.out', delay:0.3,
+    onUpdate: ()=> el.textContent = Math.round(obj.val).toLocaleString()
+  });
+});
+
+/* ============ HERO ENTRANCE ============ */
+gsap.from('.prompt-line', {opacity:0, y:10, duration:0.5});
+gsap.from('.hero h1', {opacity:0, y:30, duration:0.8, delay:0.15, ease:'power3.out'});
+gsap.from('.hero .sub', {opacity:0, y:20, duration:0.7, delay:0.4});
+gsap.from('.hero-stats .stat', {opacity:0, y:20, duration:0.6, stagger:0.08, delay:0.6});
+gsap.from('.scroll-cue', {opacity:0, duration:0.6, delay:1.2});
+gsap.from('header', {opacity:0, y:-20, duration:0.6});
+
+/* ============ SECTION ENTRANCE ON SCROLL ============ */
+document.querySelectorAll('.section-head').forEach(el=>{
+  gsap.fromTo(el, {opacity:0, y:26}, {
+    opacity:1, y:0, duration:0.7, ease:'power2.out',
+    scrollTrigger:{ trigger:el, start:'top 85%' }
+  });
+});
+
+/* filter bar reveal */
+gsap.fromTo('.filters', {opacity:0, y:20}, {opacity:1, y:0, duration:0.6, scrollTrigger:{trigger:'.filters', start:'top 88%'}});
+
+/* ============ REPO PANEL PARALLAX + BAR FILL ============ */
+gsap.utils.toArray('.repo-panel').forEach(panel=>{
+  const bg = panel.querySelector('.bgtext');
+  const speed = parseFloat(bg.dataset.speed);
+  gsap.to(bg, {
+    yPercent: 40 * speed * -1,
+    ease:'none',
+    scrollTrigger:{ trigger: panel, start:'top bottom', end:'bottom top', scrub:true }
+  });
+  gsap.fromTo(panel.querySelector('.repo-bar-fill'), {width:'0%'}, {
+    width: panel.querySelector('.repo-bar-fill').dataset.fill + '%',
+    duration:1.4, ease:'power3.out',
+    scrollTrigger:{ trigger: panel, start:'top 70%' }
+  });
+  gsap.fromTo(panel.querySelectorAll('.repo-grid .pr-card'), {opacity:0, y:30}, {
+    opacity:1, y:0, duration:0.6, stagger:0.06, ease:'power2.out',
+    scrollTrigger:{ trigger: panel, start:'top 65%' }
+  });
+  gsap.fromTo(panel.querySelector('.repo-head'), {opacity:0, x:-30}, {
+    opacity:1, x:0, duration:0.7, ease:'power2.out',
+    scrollTrigger:{ trigger: panel, start:'top 75%' }
+  });
+});
+
+/* ============ SUBTLE MOUSE PARALLAX ON HERO ============ */
+const heroSection = document.querySelector('.hero');
+heroSection.addEventListener('mousemove', e=>{
+  const {innerWidth:w, innerHeight:h} = window;
+  const x = (e.clientX / w - 0.5) * 14;
+  const y = (e.clientY / h - 0.5) * 14;
+  gsap.to('.hero h1', {x: x*0.6, y: y*0.6, duration:0.6, ease:'power2.out'});
+  gsap.to('.hero-stats', {x: x*0.2, duration:0.6, ease:'power2.out'});
+});
+
+/* ============ TERMINAL TICKER (fake live line) ============ */
+setInterval(()=>{
+  const idx = Math.floor(Math.random()*DATA.length);
+  const d = DATA[idx];
+}, 4000);
+</script>
+</body>
+</html>
