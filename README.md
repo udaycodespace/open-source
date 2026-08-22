@@ -1,413 +1,124 @@
-<div align="center">
+# Hey, I'm Uday 👋
 
-<br/>
+### Turning Ideas Into Products People Use.
 
-```txt
- ██████╗ ██████╗ ███████╗███╗   ██╗
-██╔═══██╗██╔══██╗██╔════╝████╗  ██║
-██║   ██║██████╔╝█████╗  ██╔██╗ ██║
-██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║
-╚██████╔╝██║     ███████╗██║ ╚████║
- ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝
-```
+I'm a developer who enjoys building things, contributing to open source, learning new technologies, and turning ideas into working projects.
 
-```txt
-███████╗ ██████╗ ██╗   ██╗██████╗  ██████╗███████╗
-██╔════╝██╔═══██╗██║   ██║██╔══██╗██╔════╝██╔════╝
-███████╗██║   ██║██║   ██║██████╔╝██║     █████╗
-╚════██║██║   ██║██║   ██║██╔══██╗██║     ██╔══╝
-███████║╚██████╔╝╚██████╔╝██║  ██║╚██████╗███████╗
-╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚══════╝
-```
+## About Me
 
-### Open Source Engineering & Collaborative Builds
+• 💻 Developer and open source contributor  
+• 🤖 Interested in AI and emerging technologies  
+• 🌐 Building and contributing to developer projects  
+• 🛠️ Enjoy solving problems through code  
+• 📚 Always learning, experimenting, and building  
 
-<br/>
-
-[![Open Source](https://img.shields.io/badge/Open_Source-Contributions-blue?style=for-the-badge)](#)
-[![Machine Learning](https://img.shields.io/badge/Machine_Learning-Projects-success?style=for-the-badge)](#)
-[![Full Stack](https://img.shields.io/badge/Full_Stack-Collaboration-orange?style=for-the-badge)](#)
-[![DevOps](https://img.shields.io/badge/CI%2FCD-Automation-red?style=for-the-badge)](#)
-
-<br/>
-
-> **Contribute · Collaborate · Improve · Iterate**
-
-> Collection of open source contributions, collaborative engineering projects, ML experimentation, and full stack systems built across multiple domains and technology stacks.
-
-<br/>
-
-[Machine Learning](#-machine-learning-projects) •
-[Full Stack](#-full-stack-contributions) •
-[Tools](#-developer-tools) •
-[Contribution Logs](#-contribution-logs)
-
----
-
-</div>
-
-# 📘 Overview
-
-> [!NOTE]
-> This repository contains open source contributions, collaborative projects, ML experimentation systems, utilities, and engineering logs documenting contribution workflows.
-
-The repository focuses on:
-
-* collaborative engineering
-* contribution-based development
-* ML experimentation
-* deployment workflows
-* CI/CD systems
-* utility tooling
-* production-oriented implementation
-
----
-
-# 🧠 Engineering Focus
-
-<table>
-<tr>
-
-<td width="33%" valign="top">
-
-## 🤖 Machine Learning
-
-* predictive systems
-* regression workflows
-* model experimentation
-* deployment pipelines
-* visualization systems
-* inference workflows
-
-</td>
-
-<td width="33%" valign="top">
-
-## 🌐 Full Stack Systems
-
-* frontend/backend integration
-* collaborative engineering
-* Spring Boot systems
-* React applications
-* scalable architecture
-* API workflows
-
-</td>
-
-<td width="33%" valign="top">
-
-## ⚙️ Tooling & DevOps
-
-* CI/CD automation
-* GitHub Actions
-* deployment workflows
-* utility tooling
-* AWS deployment
-* contribution tracking
-
-</td>
-
-</tr>
-</table>
-
----
-
-# 🤖 Machine Learning Projects
-
-> [!IMPORTANT]
-> ML projects focused on predictive systems, experimentation pipelines, deployment workflows, and practical model integration.
-
----
-
-## 📂 Engineering Domains
-
-<table>
-<tr>
-<th>Project</th>
-<th>Description</th>
-<th>Focus Areas</th>
-</tr>
-
-<tr>
-<td><strong>forest-fire-prediction/</strong></td>
-<td>Forest fire prediction system integrating ML workflows with AWS Elastic Beanstalk deployment and GitHub Actions automation.</td>
-<td>AWS · CI/CD · Deployment Pipelines</td>
-</tr>
-
-<tr>
-<td><strong>heart-attack-prediction/</strong></td>
-<td>Heart attack risk prediction platform with Flask interface, analytics workflows, and visualization support.</td>
-<td>Flask · Visualization · Prediction Systems</td>
-</tr>
-
-<tr>
-<td><strong>car-price-prediction/</strong></td>
-<td>Regression-based car price prediction system with dataset analysis, feature engineering, and model comparison workflows.</td>
-<td>Regression · Analytics · ML Experimentation</td>
-</tr>
-
-</table>
-
----
-
-# 🌐 Full Stack Contributions
-
-> [!TIP]
-> Collaborative full stack engineering projects involving frontend systems, backend APIs, and scalable application workflows.
-
----
-
-## 📂 Engineering Domains
-
-<table>
-<tr>
-<th>Project</th>
-<th>Description</th>
-<th>Focus Areas</th>
-</tr>
-
-<tr>
-<td><strong>EduTrack/</strong></td>
-<td>Collaborative education tracking system built using Spring Boot and React as part of open source contribution workflows.</td>
-<td>Spring Boot · React · APIs</td>
-</tr>
-
-</table>
-
----
-
-# ⚙️ Developer Tools
-
-> [!NOTE]
-> Lightweight utilities and productivity-focused engineering tools.
-
----
-
-## 📂 Engineering Domains
-
-<table>
-<tr>
-<th>Project</th>
-<th>Description</th>
-<th>Focus Areas</th>
-</tr>
-
-<tr>
-<td><strong>thumb-grabber/</strong></td>
-<td>YouTube thumbnail extraction utility designed for quick media retrieval workflows.</td>
-<td>Utility Tooling · Browser Workflows</td>
-</tr>
-
-</table>
-
----
-
-# 📝 Contribution Logs
-
-> [!TIP]
-> Engineering logs documenting contribution workflows, collaboration notes, debugging observations, and open source learning experiences.
-
----
-
-## 📂 Engineering Domains
-
-<table>
-<tr>
-<th>Project</th>
-<th>Description</th>
-<th>Focus Areas</th>
-</tr>
-
-<tr>
-<td><strong>contribution-log/</strong></td>
-<td>Running contribution archive documenting open source participation, repository exploration, and engineering collaboration notes.</td>
-<td>Contribution Tracking · Collaboration</td>
-</tr>
-
-</table>
-
----
-
-# 🏗️ Repository Architecture
+## Open Source Journey
 
 ```mermaid
-flowchart TD
+flowchart LR
+    A["2018<br/><b>Google Code-in</b><br/>Oct to Dec"]
+    --> B["2019 to 2025<br/><b>Break</b>"]
+    --> C["2026<br/><b>Self Driven Open Source</b><br/>Jan to Apr<br/>5 Repositories"]
+    --> D["2026<br/><b>GSSoC '26</b><br/>Open Source Contributor<br/>May 15 to Aug 15"]
+    --> E["2026<br/><b>ECSOC '26</b><br/>Project Admin<br/>LearnHub<br/>Jul to Present"]
 
-A[open-source]
+    classDef gci fill:#0969da,stroke:#0969da,color:#fff;
+    classDef pause fill:#57606a,stroke:#57606a,color:#fff;
+    classDef self fill:#8250df,stroke:#8250df,color:#fff;
+    classDef gssoc fill:#bf3989,stroke:#bf3989,color:#fff;
+    classDef ecsoc fill:#1a7f37,stroke:#1a7f37,color:#fff;
 
-A --> B[Machine Learning]
-A --> C[Full Stack]
-A --> D[Tools]
-A --> E[Contribution Logs]
+    class A gci;
+    class B pause;
+    class C self;
+    class D gssoc;
+    class E ecsoc;
 
-B --> F[Prediction Systems]
-B --> G[Regression Models]
+    linkStyle default stroke:#8c959f,stroke-width:2px;
+````
 
-C --> H[Spring Boot APIs]
-C --> I[React Systems]
+## Open Source
 
-D --> J[Utility Tooling]
+### Google Code in 2018
 
-E --> K[Contribution Tracking]
-```
+My first open source experience, where I participated in Google Code in 2018.
 
----
+### Self Driven Open Source
 
-# ⚡ Contribution Workflow
+Restarted my open source journey independently in 2026 and contributed across multiple repositories.
 
-```mermaid
-flowchart TD
+### GSSoC '26
 
-A[Explore Repository]
---> B[Understand Architecture]
+**Role:** Open Source Contributor
 
-B --> C[Fix / Improve System]
+Contributed to open source projects through GirlScript Summer of Code 2026.
 
-C --> D[Test Changes]
+🔗 [GSSoC Profile](https://gssoc.girlscript.org/profile/75978a65-aabb-4e38-a236-166f5a60c8be)
 
-D --> E[Create Contribution]
+### ECSOC 2026
 
-E --> F[Document Learnings]
-```
+**Role:** Project Admin
+**Project:** LearnHub
 
----
+Continuing my open source journey by helping manage and contribute to an open source project.
 
-# 🧩 Technology Stack
+🔗 [ECSOC Profile](https://www.summerofcode.xyz/profile/project-admin/udaycodespace)
 
-<div align="center">
+## Things I Like Building
 
-| Domain               | Technologies                  |
-| -------------------- | ----------------------------- |
-| **Machine Learning** | Python · scikit-learn · Flask |
-| **Full Stack**       | Java · Spring Boot · React    |
-| **Cloud & DevOps**   | AWS · GitHub Actions          |
-| **Utilities**        | JavaScript · Browser APIs     |
-| **Collaboration**    | Git · GitHub Workflows        |
+• 🌐 Web applications
+• 🤖 AI projects
+• 🧩 Developer tools
+• 🎮 Small experimental projects
+• 📦 Open source projects
+• 💡 Ideas turned into working products
 
-</div>
+## Technologies
 
----
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge\&logo=openjdk\&logoColor=white)
+![C](https://img.shields.io/badge/C-A8B9CC?style=for-the-badge\&logo=c\&logoColor=black)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge\&logo=javascript\&logoColor=black)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge\&logo=html5\&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge\&logo=css3\&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge\&logo=git\&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge\&logo=github\&logoColor=white)
 
-# 📚 Engineering Areas Explored
+## GitHub
 
-<div align="center">
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=udaycodespace&show_icons=true&theme=transparent&hide_border=true" height="170"/>
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=udaycodespace&layout=compact&theme=transparent&hide_border=true" height="170"/>
+</p>
 
-<table>
-<tr>
+<p align="center">
+  <img src="https://streak-stats.demolab.com?user=udaycodespace&theme=transparent&hide_border=true" />
+</p>
 
-<td width="50%" valign="top" align="left">
+## My Open Source Philosophy
 
-## 🤖 ML Engineering
+> Build. Contribute. Learn. Repeat.
 
-* predictive systems
-* regression workflows
-* feature engineering
-* deployment pipelines
-* Flask integrations
-* analytics visualizations
+I enjoy exploring ideas through code, contributing to projects, and learning by building.
 
-</td>
+## Currently
 
-<td width="50%" valign="top" align="left">
+🌱 Building and experimenting with new projects
 
-## 🌐 Open Source Engineering
+🤝 Contributing to open source
 
-* collaborative workflows
-* contribution systems
-* CI/CD automation
-* debugging processes
-* repository exploration
-* scalable integration patterns
+🚀 Exploring ideas that can become real products
 
-</td>
+📚 Learning something new every day
 
-</tr>
-</table>
+## Connect
 
-</div>
-
----
-
-# 🚀 Key Engineering Systems
-
-<table>
-<tr>
-
-<td width="50%" valign="top">
-
-## 🔥 Forest Fire Prediction
-
-> ML-powered prediction workflow integrating deployment automation and cloud infrastructure.
-
-### Focus
-
-* AWS deployment
-* GitHub Actions
-* model deployment
-* CI/CD workflows
-
-</td>
-
-<td width="50%" valign="top">
-
-## 🎓 EduTrack
-
-> Collaborative education management system integrating React frontend workflows with Spring Boot backend services.
-
-### Focus
-
-* frontend/backend integration
-* API workflows
-* collaborative engineering
-* scalable architecture
-
-</td>
-
-</tr>
-</table>
-
----
-
-# 🧠 Engineering Principles
-
-> [!TIP]
-> Open source work here focuses not only on writing code, but understanding architecture decisions, collaboration workflows, deployment systems, and maintainability.
-
-### Core Principles
-
-* collaborative engineering
-* production-oriented thinking
-* iterative improvements
-* architecture exploration
-* deployment awareness
-* contribution-driven learning
-
----
-
-# ⚡ Open Source Philosophy
-
-> [!WARNING]
-> Most repositories inside this archive contain:
->
-> * contribution experiments
-> * collaborative implementations
-> * architecture explorations
-> * deployment workflows
-> * debugging iterations
-> * engineering learning trails
-
----
-
-<div align="center">
-
-<br/>
-
-**Built through open source collaboration and engineering experimentation**
-
-<br/>
-
-*Machine Learning · Full Stack · DevOps · Collaboration*
-
-<br/>
-
-</div>
+<p align="center">
+  <a href="https://github.com/udaycodespace">
+    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
+  </a>
+</p>
+
+<p align="center">
+  <b>Turning Ideas Into Products People Use.</b>
+</p>
