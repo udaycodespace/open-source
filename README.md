@@ -1,124 +1,196 @@
-# Hey, I'm Uday 👋
+<h1 align="center">Open Source Work</h1>
 
-### Turning Ideas Into Products People Use.
+<p align="center">
+  <img src="https://img.shields.io/badge/OPEN_SOURCE-00C896?style=for-the-badge&logo=github&logoColor=white">
+  <img src="https://img.shields.io/badge/2018_%E2%86%92_2026-6C63FF?style=for-the-badge">
+  <img src="https://img.shields.io/badge/GSSoC_'26-EC4899?style=for-the-badge">
+  <img src="https://img.shields.io/badge/ECSOC_2026-10B981?style=for-the-badge">
+</p>
 
-I'm a developer who enjoys building things, contributing to open source, learning new technologies, and turning ideas into working projects.
+<p align="center">
+  <b>A collection of my open source work across events, programs, and independent contributions.</b>
+</p>
 
-## About Me
+<p align="center">
+  <i>From the first contribution to building and helping manage open source projects.</i>
+</p>
 
-• 💻 Developer and open source contributor  
-• 🤖 Interested in AI and emerging technologies  
-• 🌐 Building and contributing to developer projects  
-• 🛠️ Enjoy solving problems through code  
-• 📚 Always learning, experimenting, and building  
-
-## Open Source Journey
+## 🧭 The Journey
 
 ```mermaid
 flowchart LR
-    A["2018<br/><b>Google Code-in</b><br/>Oct to Dec"]
-    --> B["2019 to 2025<br/><b>Break</b>"]
-    --> C["2026<br/><b>Self Driven Open Source</b><br/>Jan to Apr<br/>5 Repositories"]
-    --> D["2026<br/><b>GSSoC '26</b><br/>Open Source Contributor<br/>May 15 to Aug 15"]
-    --> E["2026<br/><b>ECSOC '26</b><br/>Project Admin<br/>LearnHub<br/>Jul to Present"]
+    A["🟦<br/><b>2018</b><br/><br/>GOOGLE CODE-IN<br/><small>Oct → Dec</small>"]
+    B["⬜<br/><b>2019 → 2025</b><br/><br/>BREAK<br/><small>OSS paused</small>"]
+    C["🟪<br/><b>JAN → APR 2026</b><br/><br/>SELF DRIVEN OSS<br/><small>5 Independent Repositories</small>"]
+    D["🩷<br/><b>MAY 15 → AUG 15 2026</b><br/><br/>GSSoC '26<br/><small>Open Source Contributor</small>"]
+    E["🟩<br/><b>JUL 2026 → NOW</b><br/><br/>ECSOC 2026<br/><small>Project Admin · LearnHub</small>"]
 
-    classDef gci fill:#0969da,stroke:#0969da,color:#fff;
-    classDef pause fill:#57606a,stroke:#57606a,color:#fff;
-    classDef self fill:#8250df,stroke:#8250df,color:#fff;
-    classDef gssoc fill:#bf3989,stroke:#bf3989,color:#fff;
-    classDef ecsoc fill:#1a7f37,stroke:#1a7f37,color:#fff;
+    A --> B
+    B --> C
+    C --> D
+    D --> E
 
-    class A gci;
-    class B pause;
-    class C self;
-    class D gssoc;
-    class E ecsoc;
+    classDef blue fill:#2563EB,stroke:#93C5FD,color:#FFFFFF,stroke-width:3px
+    classDef grey fill:#475569,stroke:#CBD5E1,color:#FFFFFF,stroke-width:3px
+    classDef purple fill:#7C3AED,stroke:#C4B5FD,color:#FFFFFF,stroke-width:3px
+    classDef pink fill:#DB2777,stroke:#F9A8D4,color:#FFFFFF,stroke-width:3px
+    classDef green fill:#059669,stroke:#6EE7B7,color:#FFFFFF,stroke-width:3px
 
-    linkStyle default stroke:#8c959f,stroke-width:2px;
+    class A blue
+    class B grey
+    class C purple
+    class D pink
+    class E green
+
+    linkStyle 0,1,2,3 stroke:#94A3B8,stroke-width:3px
 ````
 
-## Open Source
+## 📊 The Numbers
 
-### Google Code in 2018
-
-My first open source experience, where I participated in Google Code in 2018.
-
-### Self Driven Open Source
-
-Restarted my open source journey independently in 2026 and contributed across multiple repositories.
-
-### GSSoC '26
-
-**Role:** Open Source Contributor
-
-Contributed to open source projects through GirlScript Summer of Code 2026.
-
-🔗 [GSSoC Profile](https://gssoc.girlscript.org/profile/75978a65-aabb-4e38-a236-166f5a60c8be)
-
-### ECSOC 2026
-
-**Role:** Project Admin
-**Project:** LearnHub
-
-Continuing my open source journey by helping manage and contribute to an open source project.
-
-🔗 [ECSOC Profile](https://www.summerofcode.xyz/profile/project-admin/udaycodespace)
-
-## Things I Like Building
-
-• 🌐 Web applications
-• 🤖 AI projects
-• 🧩 Developer tools
-• 🎮 Small experimental projects
-• 📦 Open source projects
-• 💡 Ideas turned into working products
-
-## Technologies
-
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
-![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge\&logo=openjdk\&logoColor=white)
-![C](https://img.shields.io/badge/C-A8B9CC?style=for-the-badge\&logo=c\&logoColor=black)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge\&logo=javascript\&logoColor=black)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge\&logo=html5\&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge\&logo=css3\&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge\&logo=git\&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge\&logo=github\&logoColor=white)
-
-## GitHub
+<table align="center">
+  <tr>
+    <td align="center" width="180">
+      <h2>5</h2>
+      <b>Independent<br>Repositories</b>
+    </td>
+    <td align="center" width="180">
+      <h2>~11</h2>
+      <b>GSSoC<br>Repositories</b>
+    </td>
+    <td align="center" width="180">
+      <h2>~60–70</h2>
+      <b>OSS<br>Repositories</b>
+    </td>
+    <td align="center" width="180">
+      <h2>2</h2>
+      <b>Major OSS<br>Programs in 2026</b>
+    </td>
+  </tr>
+</table>
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=udaycodespace&show_icons=true&theme=transparent&hide_border=true" height="170"/>
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=udaycodespace&layout=compact&theme=transparent&hide_border=true" height="170"/>
+  <img src="https://img.shields.io/badge/🌱_2018-FIRST_OSS-2563EB?style=for-the-badge">
+  <img src="https://img.shields.io/badge/💻_2026-SELF_DRIVEN-7C3AED?style=for-the-badge">
+  <img src="https://img.shields.io/badge/🤝_GSSoC-CONTRIBUTOR-DB2777?style=for-the-badge">
+  <img src="https://img.shields.io/badge/🚀_ECSOC-PROJECT_ADMIN-059669?style=for-the-badge">
+</p>
+
+## 🎯 Milestones
+
+<table align="center">
+  <thead>
+    <tr>
+      <th>🗓️ Period</th>
+      <th>🚀 Program</th>
+      <th>🎯 Role</th>
+      <th>📍 Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center"><b>Oct → Dec 2018</b></td>
+      <td align="center">🟦 <b>Google Code-in</b></td>
+      <td align="center">🌱 Open Source Participant</td>
+      <td align="center">🔵 Completed</td>
+    </tr>
+    <tr>
+      <td align="center"><b>2019 → 2025</b></td>
+      <td align="center">⚪ <b>Break</b></td>
+      <td align="center">💤</td>
+      <td align="center">⚪ Paused</td>
+    </tr>
+    <tr>
+      <td align="center"><b>Jan → Apr 2026</b></td>
+      <td align="center">🟪 <b>Independent OSS</b></td>
+      <td align="center">💻 Contributor</td>
+      <td align="center">🟣 Completed</td>
+    </tr>
+    <tr>
+      <td align="center"><b>May 15 → Aug 15 2026</b></td>
+      <td align="center">🩷 <b>GSSoC '26</b></td>
+      <td align="center">🤝 Open Source Contributor</td>
+      <td align="center">🟢 Completed</td>
+    </tr>
+    <tr>
+      <td align="center"><b>Jul 2026 → Now</b></td>
+      <td align="center">🟩 <b>ECSOC 2026</b></td>
+      <td align="center">🚀 Project Admin · LearnHub</td>
+      <td align="center">🟢 Active</td>
+    </tr>
+  </tbody>
+</table>
+
+## 🧩 Programs
+
+<table align="center">
+  <tr>
+    <td align="center" width="260">
+      <h3>🟦 Google Code-in</h3>
+      <b>2018</b>
+      <br><br>
+      🌱 Open Source Participant
+      <br>
+      <sub>First OSS experience</sub>
+    </td>
+    <td align="center" width="260">
+      <h3>🩷 GSSoC '26</h3>
+      <b>2026</b>
+      <br><br>
+      🤝 Open Source Contributor
+      <br>
+      <sub>~11 repositories</sub>
+    </td>
+    <td align="center" width="260">
+      <h3>🟩 ECSOC 2026</h3>
+      <b>2026</b>
+      <br><br>
+      🚀 Project Admin
+      <br>
+      <sub>LearnHub</sub>
+    </td>
+  </tr>
+</table>
+
+## 🔗 Profiles
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <b>🩷 GSSoC '26</b>
+      <br><br>
+      <a href="https://gssoc.girlscript.org/profile/75978a65-aabb-4e38-a236-166f5a60c8be">
+        <img src="https://img.shields.io/badge/VIEW_PROFILE-EC4899?style=for-the-badge&logo=github&logoColor=white">
+      </a>
+    </td>
+    <td width="80"></td>
+    <td align="center">
+      <b>🟩 ECSOC 2026</b>
+      <br>
+      <sub>Project Admin · LearnHub</sub>
+      <br><br>
+      <a href="https://www.summerofcode.xyz/profile/project-admin/udaycodespace">
+        <img src="https://img.shields.io/badge/VIEW_PROFILE-10B981?style=for-the-badge&logo=github&logoColor=white">
+      </a>
+    </td>
+  </tr>
+</table>
+
+## ⚡ The Progression
+
+<p align="center">
+  <b>🌱 PARTICIPANT</b>
+  &nbsp; → &nbsp;
+  <b>💻 CONTRIBUTOR</b>
+  &nbsp; → &nbsp;
+  <b>🤝 OSS CONTRIBUTOR</b>
+  &nbsp; → &nbsp;
+  <b>🚀 PROJECT ADMIN</b>
 </p>
 
 <p align="center">
-  <img src="https://streak-stats.demolab.com?user=udaycodespace&theme=transparent&hide_border=true" />
-</p>
-
-## My Open Source Philosophy
-
-> Build. Contribute. Learn. Repeat.
-
-I enjoy exploring ideas through code, contributing to projects, and learning by building.
-
-## Currently
-
-🌱 Building and experimenting with new projects
-
-🤝 Contributing to open source
-
-🚀 Exploring ideas that can become real products
-
-📚 Learning something new every day
-
-## Connect
-
-<p align="center">
-  <a href="https://github.com/udaycodespace">
-    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
-  </a>
+  <b>2018 → Break → 2026 → Active</b>
 </p>
 
 <p align="center">
-  <b>Turning Ideas Into Products People Use.</b>
+  <i>Build • Contribute • Learn • Repeat</i>
 </p>
