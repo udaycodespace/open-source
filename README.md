@@ -44,7 +44,7 @@ flowchart LR
     class E green
 ```
 
-## 🎯 Milestones
+## 🎯 Open Source Timeline
 
 <table align="center">
   <thead>
